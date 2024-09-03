@@ -1,5 +1,5 @@
 package com.booking.rentalapplication.serviceimple;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,7 +185,7 @@ public class BookingService implements IBookingService {
 
     
 
-
+    @Transactional
 	@Override
 	public Response vehicleSubmit(Long bookingId) {
 		Response response = new Response();

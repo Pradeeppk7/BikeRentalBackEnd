@@ -15,6 +15,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.time.LocalDateTime;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -57,6 +58,10 @@ public class User {
 
     @Pattern(regexp = "^\\d{10}$", message = "Phone number should be 10 digits")
     private String phoneNumber;
+    
+    private String otpcode;
+    
+    private LocalDateTime expiryDate;
 
     private String role;
 
