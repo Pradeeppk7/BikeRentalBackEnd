@@ -21,4 +21,10 @@ public interface UserService {
 	
     public Response getUserById(String userId);
 
+//	public Response emailVerify(User user);
+
+	public Response sendEmailOtp(User user)  throws UserAlreadyPresentException;
+
+	public Response registerUserWithOtp(User user) throws InvalidCredentialException;
+
 }

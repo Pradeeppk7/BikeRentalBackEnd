@@ -44,12 +44,27 @@ public class UserController {
 	@Autowired
 	private Jwtutil jwtutil;
 	
+	
+	@PostMapping("/sendotp")
+	public ResponseEntity<Response> sendOtp(@RequestBody @Valid User user) throws UserAlreadyPresentException {
+		Response response=(userService.sendEmailOtp(user)) ;
+		return ResponseEntity.status(response.getStatusCode()).body(response);
 		
+	}
+	@PostMapping("/registerwithotp")
+	public ResponseEntity<Response> registerUserWithOtp(@RequestBody @Valid User user) throws InvalidCredentialException{
+		//  user.setId(userService.genrateUniqueRandomId());
+//           	Response response=(userService.registerUser(user)) ;
+		Response response=(userService.registerUserWithOtp(user)) ;
+		return ResponseEntity.status(response.getStatusCode()).body(response);
+	}
 	@PostMapping("/register")
     public ResponseEntity<Response> registerUser(@RequestBody @Valid User user) throws UserAlreadyPresentException {
           //  user.setId(userService.genrateUniqueRandomId());
            	Response response=(userService.registerUser(user)) ;
+//           	Response response=(userService.registerUserWithOtp(user)) ;
            return ResponseEntity.status(response.getStatusCode()).body(response);
+	}
 //           			{
 //            	
 //            	if(user.getRole().equalsIgnoreCase("User"))
@@ -61,7 +76,6 @@ public class UserController {
 //            }else {
 //            	return new ResponseEntity<String>("Something went worng!!!",HttpStatus.INTERNAL_SERVER_ERROR);
 //            }
-	}
         
 
 //    @PostMapping("/login")

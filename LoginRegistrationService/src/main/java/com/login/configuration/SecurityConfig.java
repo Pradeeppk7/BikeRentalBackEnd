@@ -40,6 +40,8 @@ public class SecurityConfig {
 				.requestMatchers("/user/register").permitAll()
 				.requestMatchers("/user/get-by-id/**").permitAll()
 				.requestMatchers("/user/all").permitAll()
+				.requestMatchers("/user/sendotp").permitAll()
+				.requestMatchers("/user/registerwithotp").permitAll()
 				.requestMatchers("/user/login").permitAll().anyRequest().authenticated());
 		return http.build();
 	}

@@ -32,7 +32,10 @@ public class RouteValidator {
             "/bookings/get-by-confirmation-code",
     		"/user/login",
     		"/user/register",
-    		"/user/validate"
+    		"/user/validate",
+    		"/user/registerwithotp",
+    		"/user/sendotp"
+    		
     );
     
     private static final List<Pattern> openApiPatterns = openApiEndpoints.stream()

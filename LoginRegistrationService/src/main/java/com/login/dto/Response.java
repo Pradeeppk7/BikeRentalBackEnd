@@ -2,6 +2,7 @@ package com.login.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.login.model.Otp;
 import com.login.model.User;
 
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Response {
     private String expirationTime;
     private String bookingConfirmationCode;
 //    private boolean submitted;
-
+    private Otp otp;
     private User user;
 //    private VehicleDTO vehicle;
 //    private BookingDTO booking;
