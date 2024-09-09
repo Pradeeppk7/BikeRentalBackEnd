@@ -2,6 +2,8 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\SPRAKUMA\Desktop\ms backend\kyc"/>
+			<item value="C:\Users\SPRAKUMA\Downloads\kyc"/>
 			<item value="C:\Users\SPRAKUMA\Desktop\ms backend\ApiGateway"/>
 			<item value="C:\Users\SPRAKUMA\Downloads\user-service"/>
 			<item value="C:\Users\SPRAKUMA\Downloads\service-registry"/>

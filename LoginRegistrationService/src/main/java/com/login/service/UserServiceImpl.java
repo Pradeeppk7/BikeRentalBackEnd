@@ -148,7 +148,10 @@ public class UserServiceImpl implements UserService{
     		if(isVerifyEmail) {
     			Otp otpEntity = otpRepository.findByEmail(user.getEmail());
     			System.err.println(otpEntity.getOtpCode()+user.getOtpCode());
-    	        if (otpEntity != null && otpEntity.getOtpCode().equals(user.getOtpCode()) && LocalDateTime.now().isBefore(otpEntity.getExpiryDate())) {
+    			if(LocalDateTime.now().isBefore(otpEntity.getExpiryDate())) {
+    				throw new InvalidCredentialException("OTP is Expired");
+    			}
+    	        if (otpEntity != null && otpEntity.getOtpCode().equals(user.getOtpCode())) {
     	        	otpRepository.delete(otpEntity); // Optionally delete the OTP after successful verification
     	            user.setPassword(passwordEncoder.encode(user.getPassword()));
     	            User savedUser = userRepository.save(user);
@@ -184,6 +187,7 @@ public class UserServiceImpl implements UserService{
 	            if (user.getRole() == null || user.getRole().isBlank()) {
 	                user.setRole("USER");
 	            }
+	            
 	            
 	            user.setPassword(passwordEncoder.encode(user.getPassword()));
 	            User savedUser = userRepository.save(user);
