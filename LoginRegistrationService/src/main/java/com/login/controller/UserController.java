@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,7 +85,7 @@ public class UserController {
 ////    	return ResponseEntity.status(response.getStatusCode()).body(response);
 //    	   return ResponseEntity.ok(userService.login(loginUser));
 //    }
-
+	
 	@PostMapping("/login")
     public ResponseEntity<Response> loginUser(@RequestBody @Valid AuthDto loginUser) throws InvalidCredentialException {
 		Response response = userService.login(loginUser);
@@ -98,6 +99,12 @@ public class UserController {
         jwtutil.validateToken(token);
         return ResponseEntity.ok("Token is valid");
         
+    }
+    @PutMapping("/verifykyc/{userId}")
+    public ResponseEntity<Response> verifyKyc(@PathVariable("userId") String userId){
+    	System.err.println("Controller triggered");
+    	Response response = userService.verfiyKyc(Long.valueOf(userId));
+    	return ResponseEntity.status(response.getStatusCode()).body(response);
     }
         
     @DeleteMapping("/delete/{userId}")

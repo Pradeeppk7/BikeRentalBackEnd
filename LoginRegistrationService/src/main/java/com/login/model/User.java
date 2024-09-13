@@ -60,8 +60,9 @@ public class User {
     private String phoneNumber;
     
     private String otpCode;
-    
-    private LocalDateTime otpExpiry;
+
+//    private Boolean kycVerified; 
+    private Boolean kycVerified = false;
 
     private String role;
 

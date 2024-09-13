@@ -26,5 +26,8 @@ public interface UserService {
 	public Response sendEmailOtp(User user)  throws UserAlreadyPresentException;
 
 	public Response registerUserWithOtp(User user) throws InvalidCredentialException;
+	
+	public Response verfiyKyc(Long userId);
 
+	
 }

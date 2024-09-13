@@ -42,6 +42,7 @@ public class SecurityConfig {
 				.requestMatchers("/user/all").permitAll()
 				.requestMatchers("/user/sendotp").permitAll()
 				.requestMatchers("/user/registerwithotp").permitAll()
+				.requestMatchers("/user/verifykyc/**").permitAll()
 				.requestMatchers("/user/login").permitAll().anyRequest().authenticated());
 		return http.build();
 	}

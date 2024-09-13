@@ -22,7 +22,7 @@ import java.util.List;
 //@CrossOrigin("*")
 public class vehicleController {
 
-    @Autowired
+    @Autowired 
     private IVehicleService vehicleService;
 //    @Autowired
 //    private IBookingService iBookingService;

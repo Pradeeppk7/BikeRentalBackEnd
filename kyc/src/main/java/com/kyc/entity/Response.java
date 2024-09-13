@@ -2,6 +2,8 @@ package com.kyc.entity;
 
 
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
@@ -19,6 +21,6 @@ public class Response {
     private String role;
     
     private Kyc kyc;
-    
+    private List<Kyc> list;
 }
 

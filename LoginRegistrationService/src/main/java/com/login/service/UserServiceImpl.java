@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService{
 	        try {
 	        	Otp otp=new Otp();
 	            if (userRepository.existsByEmail(user.getEmail())) {
-	                throw new UserAlreadyPresentException(user.getEmail() + "Already Exists");
+	                throw new UserAlreadyPresentException(user.getEmail() + " Already Exists");
 	            	}
 	            if (otpRepository.existsByEmail(user.getEmail())) {
 	            		otp=otpRepository.findByEmail(user.getEmail());
@@ -147,9 +147,11 @@ public class UserServiceImpl implements UserService{
     		}
     		if(isVerifyEmail) {
     			Otp otpEntity = otpRepository.findByEmail(user.getEmail());
-    			System.err.println(otpEntity.getOtpCode()+user.getOtpCode());
-    			if(LocalDateTime.now().isBefore(otpEntity.getExpiryDate())) {
-    				throw new InvalidCredentialException("OTP is Expired");
+//    			if(LocalDateTime.now().isBefore(otpEntity.getExpiryDate())) {
+//    				throw new InvalidCredentialException("OTP is Expired");
+//    			}
+    			if (LocalDateTime.now().isAfter(otpEntity.getExpiryDate())) {
+    			    throw new InvalidCredentialException("OTP is Expired");
     			}
     	        if (otpEntity != null && otpEntity.getOtpCode().equals(user.getOtpCode())) {
     	        	otpRepository.delete(otpEntity); // Optionally delete the OTP after successful verification
@@ -157,6 +159,7 @@ public class UserServiceImpl implements UserService{
     	            User savedUser = userRepository.save(user);
     	            response.setStatusCode(200);
     	            response.setUser(savedUser);
+    	            System.err.println(otpEntity.getOtpCode()+user.getOtpCode());
     	        }else {
     	        	throw new InvalidCredentialException("OTP is wrong");
     	        }
@@ -353,6 +356,35 @@ public class UserServiceImpl implements UserService{
             response.setMessage("Error getting all users " + e.getMessage());
         }
         return response;
+	}
+
+
+
+	@Override
+	public Response verfiyKyc(Long userId) {
+		 Response response = new Response();
+		 System.err.println("dodo");
+
+	        try {
+	            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+	            user.setKycVerified(!user.getKycVerified());
+	            User verfiedUser=userRepository.save(user);
+	            System.err.println("Userrepo"+verfiedUser);
+	            response.setStatusCode(200);
+	            response.setMessage("Success");
+	            
+	        }
+	        catch (UsernameNotFoundException e) {
+	            response.setStatusCode(404);
+	            response.setMessage(e.getMessage());
+
+	        }
+	        catch(Exception e) {
+	        	response.setStatusCode(500);
+	            response.setMessage("Error getting all users " + e.getMessage());
+	        }
+		// TODO Auto-generated method stub
+		return response;
 	}
 
 	
