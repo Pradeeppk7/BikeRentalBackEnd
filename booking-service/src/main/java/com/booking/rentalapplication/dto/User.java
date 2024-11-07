@@ -15,6 +15,7 @@ public class User {
     private String name;
     private String phoneNumber;
     private String role;
+    private Boolean kycVerified; 
 //    private List<BookingDTO> bookings = new ArrayList<>();
 
 }

@@ -106,6 +106,11 @@ public class UserController {
     	Response response = userService.verfiyKyc(Long.valueOf(userId));
     	return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+    @PutMapping("/kycapplied/{userId}")
+    public ResponseEntity<Response> kycApplied(@PathVariable("userId") String userId){
+    	Response response=userService.kycApplied(Long.valueOf(userId));
+    	return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
         
     @DeleteMapping("/delete/{userId}")
 //    @PreAuthorize("hasAuthority('ADMIN')")

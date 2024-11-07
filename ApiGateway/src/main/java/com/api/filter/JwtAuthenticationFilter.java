@@ -79,8 +79,9 @@ public class JwtAuthenticationFilter extends  AbstractGatewayFilterFactory<JwtAu
                 		path.startsWith("/bookings/") ||
                 		path.startsWith("/bookings/booking-by-userid/") ||
                 		path.startsWith("/vehicles/") ||
-                		path.startsWith("/user/")||
                 		path.startsWith("/kyc/getkycbyuserid/")||
+                		path.startsWith("/user/kycapplied/")||
+                		path.startsWith("/kyc/updatekyc/")||
                 		path.startsWith("/kyc/add/");
                  		
 //                		path.startsWith("/vehicles/vehicle-by-id/") ||

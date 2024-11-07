@@ -23,13 +23,13 @@ public class kycController {
 			@PathVariable Long userId,
 			@RequestParam(value = "dlPhotoUrl", required = false) MultipartFile dlPhotoUrl,
 	            @RequestParam(value = "aadhaarNumber", required = false) String aadhaarNumber,
-	            @RequestParam(value = "aadhaarPhototUrl", required = false) MultipartFile aadhaarPhototUrl,
+	            @RequestParam(value = "aadhaarPhotoUrl", required = false) MultipartFile aadhaarPhotoUrl,
 	            @RequestParam(value = "dlNumber", required = false) String dlNumber,
 	            @RequestParam(value = "currentAddress", required = false) String currentAddress,
 	            @RequestParam(value = "permanentAddress", required = false) String permanentAddress
 	            ){
 		
-		Response response =kycService.addKycDetails(userId, aadhaarNumber, aadhaarPhototUrl, dlNumber, dlPhotoUrl, permanentAddress, currentAddress);
+		Response response =kycService.addKycDetails(userId, aadhaarNumber, aadhaarPhotoUrl, dlNumber, dlPhotoUrl, permanentAddress, currentAddress);
 		return  ResponseEntity.status(response.getStatusCode()).body(response);
 	}
 	
@@ -38,9 +38,27 @@ public class kycController {
 			@PathVariable Long userId,
 			@RequestParam(value = "comment", required = false) String comment){
 //		System.err.println("test"+comment);
+//		System.err.println("test"+userId);
 		Response response = kycService.verifyKycByUserId(userId,comment);
+		
 		return  ResponseEntity.status(response.getStatusCode()).body(response);
 	}
+	
+	@PutMapping("/updatekyc/{userId}")
+	public ResponseEntity<Response> updateKycByUserid(
+			@PathVariable Long userId,
+			@RequestParam(value = "dlPhotoUrl", required = false) MultipartFile dlPhotoUrl,
+            @RequestParam(value = "aadhaarNumber", required = false) String aadhaarNumber,
+            @RequestParam(value = "aadhaarPhotoUrl", required = false) MultipartFile aadhaarPhotoUrl,
+            @RequestParam(value = "dlNumber", required = false) String dlNumber,
+            @RequestParam(value = "currentAddress", required = false) String currentAddress,
+            @RequestParam(value = "permanentAddress", required = false) String permanentAddress){
+		
+		Response response = kycService.updateKycByUserid(userId, aadhaarNumber, aadhaarPhotoUrl, dlNumber, dlPhotoUrl, permanentAddress, currentAddress);
+		
+		return  ResponseEntity.status(response.getStatusCode()).body(response);
+	}
+	
 	
 	@GetMapping("/allkyc")
 	public  ResponseEntity<Response> getAllKyc(){

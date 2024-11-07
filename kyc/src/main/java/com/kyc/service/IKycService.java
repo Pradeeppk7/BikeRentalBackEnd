@@ -17,4 +17,7 @@ public interface IKycService {
 	Response getKycByUserId(Long userId);
 	
 	Response verifyKycByUserId(Long userId,String comment);
+
+	Response updateKycByUserid(Long userId, String aadhaarNumber, MultipartFile aadhaarPhotoUrl, String dlNumber,
+			MultipartFile dlPhotoUrl, String permanentAddress, String currentAddress);
 }

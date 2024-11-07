@@ -29,5 +29,7 @@ public interface UserService {
 	
 	public Response verfiyKyc(Long userId);
 
+	public Response kycApplied(Long userId);
+
 	
 }

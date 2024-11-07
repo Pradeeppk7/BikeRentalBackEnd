@@ -33,7 +33,9 @@ public class AwsS3Service {
         String s3LocationImage = null;
 
         try {
-
+        	if(photo==null) {
+        		throw new OurException("Photo is empty");
+        	}
             String s3Filename = photo.getOriginalFilename();
 
             BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsS3AccessKey, awsS3SecretKey);

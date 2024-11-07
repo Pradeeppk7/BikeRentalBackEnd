@@ -64,6 +64,8 @@ public class User {
 //    private Boolean kycVerified; 
     private Boolean kycVerified = false;
 
+    private Boolean kycApplied = false;
+    
     private String role;
 
 	@CreatedDate

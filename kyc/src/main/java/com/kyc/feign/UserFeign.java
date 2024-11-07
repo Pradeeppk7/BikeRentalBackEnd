@@ -25,4 +25,6 @@ import com.kyc.entity.User;
 		@PutMapping("/verifykyc/{userId}")
 	    public User verifyKyc(@PathVariable("userId") Long userId);
 	
+		@PutMapping("/kycapplied/{userId}")
+		public User kycApplied(@PathVariable("userId") Long userId);
 }

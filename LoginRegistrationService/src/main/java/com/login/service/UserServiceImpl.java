@@ -363,7 +363,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Response verfiyKyc(Long userId) {
 		 Response response = new Response();
-		 System.err.println("dodo");
 
 	        try {
 	            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
@@ -381,12 +380,36 @@ public class UserServiceImpl implements UserService{
 	        }
 	        catch(Exception e) {
 	        	response.setStatusCode(500);
-	            response.setMessage("Error getting all users " + e.getMessage());
+	            response.setMessage("Error " + e.getMessage());
 	        }
 		// TODO Auto-generated method stub
 		return response;
 	}
+	@Override
+	public Response kycApplied(Long userId) {	
+		Response response= new Response();
+		try {
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+            user.setKycApplied(!user.getKycApplied());
+            User verfiedUser=userRepository.save(user);
+            response.setUser(verfiedUser);
+            response.setStatusCode(200);
+            response.setMessage("Success");
+            
+        }
+        catch (UsernameNotFoundException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
 
+        }
+        catch(Exception e) {
+        	response.setStatusCode(500);
+            response.setMessage("Error " + e.getMessage());
+        }
+	// TODO Auto-generated method stub
+	return response;
+		
+	}
 	
 
 }

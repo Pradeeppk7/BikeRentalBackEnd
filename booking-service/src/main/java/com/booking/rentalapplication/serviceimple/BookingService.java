@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 import com.booking.rentalapplication.dto.Response;
 import com.booking.rentalapplication.dto.User;
@@ -20,6 +23,8 @@ import com.booking.rentalapplication.serviceinterface.IBookingService;
 import com.booking.rentalapplication.utils.Utils;
 
 import java.time.temporal.ChronoUnit;
+//import javax.mail.MessagingException;
+//import javax.mail.internet.MimeMessage;
 //import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -32,6 +37,8 @@ public class BookingService implements IBookingService {
     private VehicleFeign vehicleF;
     @Autowired 
     private UserFeign userF;
+	@Autowired
+	private JavaMailSender mailSender;
 //    @Autowired
 //    private IVehicleService vehicleService;
 //    @Autowired
@@ -52,6 +59,9 @@ public class BookingService implements IBookingService {
 //            Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow(() -> new OurException("Vehicle Not Found"));
             Vehicle v =vehicleF.getVehicleById(vehicleId).getVehicle();
             User u =userF.getUserById(userId).getUser();
+            if(!u.getKycVerified()) {
+            	throw new OurException("Kyc is required !");
+            }
 //            System.out.println(u.getUser());
 //            response.setMessage("The id is "+u);
 //            response.setStatusCode(200);
@@ -93,6 +103,31 @@ public class BookingService implements IBookingService {
 
             
             bookingRepository.save(bookingRequest);
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(u.getEmail());
+            message.setSubject("Booking Confirmed");
+            message.setText("Your Booking is confirmed, Your booking code is"+bookingRequest.getBookingConfirmationCode());
+//            MimeMessage message = mailSender.createMimeMessage(); 
+//
+//            // Use MimeMessageHelper to build a multipart message
+//            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//            helper.setTo(to);
+//            helper.setSubject(subject);
+//
+//            // Build the HTML content of the email
+//            String content = "<html>"
+//                    + "<body>"
+//                    + "<p>" + bodyText + "</p>"  // Add text content
+//                    + "<p><img src='" + imageUrl + "' alt='Image' style='width:300px;height:auto;'/></p>"  // Embed image using URL
+//                    + "</body>"
+//                    + "</html>";
+//
+//            // Set the content to be HTML
+//            helper.setText(content, true);
+
+            // Send the email
+            mailSender.send(message);
+//            mailSender.send(message);
             response.setStatusCode(200);
             response.setBookingConfirmationCode(bookingConfirmationCode);
             response.setMessage("successful"+bookingRequest);

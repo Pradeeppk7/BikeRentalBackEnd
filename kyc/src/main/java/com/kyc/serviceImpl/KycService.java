@@ -1,11 +1,14 @@
 package com.kyc.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import com.kyc.entity.Kyc;
 import com.kyc.entity.Response;
@@ -28,17 +31,74 @@ public class KycService implements IKycService{
 	  @Autowired 
 	    private UserFeign userF;
 
+	  @Override
+		public Response updateKycByUserid(Long userId, String aadhaarNumber, MultipartFile aadhaarPhotoUrl, String dlNumber,
+				MultipartFile dlPhotoUrl, String permanentAddress, String currentAddress) {
+			// TODO Auto-generated method stub
+			Response response =new Response();
+			
+			try {
+				 Kyc kyc=kycRepository.findByUserId(userId)
+		                    .orElseThrow(() -> new OurException("Kyc Not Found For Updation"));
+				
+			
+			if(aadhaarNumber!=null) {
+				kyc.setAadhaarNumber(aadhaarNumber);
+			}
+			if(aadhaarPhotoUrl!=null && !aadhaarPhotoUrl.isEmpty()) {				
+				kyc.setAadhaarPhotoUrl(awsS3Service.saveImageToS3(aadhaarPhotoUrl));
+			}
+			if(dlNumber!=null) {
+				
+				kyc.setDlNumber(dlNumber);
+			}
+			if(dlPhotoUrl!=null&&!dlPhotoUrl.isEmpty()) {
+				
+				kyc.setDlPhotoUrl(awsS3Service.saveImageToS3(dlPhotoUrl));
+			}
+			if(permanentAddress!=null) {
+				
+				kyc.setPermanentAddress(permanentAddress);
+			}
+			if(currentAddress!=null) {
+				
+			kyc.setCurrentAddress(currentAddress);
+			}
+//			kycRepository.save(kyc);
+			User user=userF.kycApplied(userId);
+			response.setKyc(kycRepository.save(kyc));
+			response.setStatusCode(200);
+            response.setMessage("successful");
+			}catch (Exception e) {
+				response.setStatusCode(500);
+				response.setMessage("Error updating a Kyc " + e.getMessage());
+			}
+			return response;
+	
+		}
+	  
 	@Override
+	@Transactional 
 	public Response addKycDetails(Long userId, String aadhaarNumber, MultipartFile aadhaarPhotoUrl, String dlNumber,
 			MultipartFile dlPhotoUrl, String permanentAddress, String currentAddress) {
 		// TODO Auto-generated method stub
+			
 			Response response = new Response();
+//			System.err.println("dl"+dlPhotoUrl.getOriginalFilename());
+//			System.err.println("Ad"+aadhaarPhotoUrl.getOriginalFilename());
 			try {
-			Kyc kyc=new Kyc();
+				Optional<Kyc> kycExist=kycRepository.findByUserId(userId);
+				if(!kycExist.isEmpty()) {
+					throw new OurException("Kyc already applied, kindly wait for approval.");
+				}
+				Kyc kyc=new Kyc();
+			
 //			Optional<Kyc> kycExist=kycRepository.findByUserId(userId);
 //			if(kycExist.isEmpty()) {
 //				
 //			}
+			User user=userF.kycApplied(userId);
+			
 			kyc.setUserId(userId);
 			kyc.setAadhaarNumber(aadhaarNumber);
 			kyc.setAadhaarPhotoUrl(awsS3Service.saveImageToS3(aadhaarPhotoUrl));
@@ -92,7 +152,7 @@ public class KycService implements IKycService{
 		try{
 			Kyc kyc=kycRepository.findByUserId(userId)
                     .orElseThrow(() -> new OurException("Kyc of the User Not Found"));
-			System.err.println(kyc.getUserId());
+//			System.err.println(kyc.getUserId());
 			response.setKyc(kyc);
 			response.setStatusCode(200);
 			response.setMessage("successful");
@@ -109,16 +169,21 @@ public class KycService implements IKycService{
 		// TODO Auto-generated method stub
 		Response response = new Response();
 		try {
-		User user=userF.verifyKyc(userId);
-		if(comment == null) {
+			Kyc kyc=kycRepository.findByUserId(userId).orElseThrow(() -> new OurException("Kyc of the User Not Found"));
+		
+		if(comment == null || comment.isEmpty()) {
 			userF.verifyKyc(userId);
+			kyc.setComment(comment);
+			kycRepository.save(kyc);
+			response.setKyc(kyc);
+//			System.err.println(comment);
 //			System.err.println("KYV Verifififififif");
 		}else {
-			Kyc kyc=kycRepository.findByUserId(userId).orElseThrow(() -> new OurException("Kyc of the User Not Found"));
 			kyc.setComment(comment);
 			kycRepository.save(kyc);
 			response.setKyc(kyc);
 		}
+		User user=userF.kycApplied(userId);
 		response.setStatusCode(200);
 		response.setMessage("successful");
 		
@@ -129,6 +194,9 @@ public class KycService implements IKycService{
 		
 		return response;
 	}
+
+
+	
 
 
 }

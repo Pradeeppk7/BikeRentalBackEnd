@@ -22,6 +22,7 @@ public class RouteValidator {
     // List of open API endpoints that do not require authentication
     public static final List<String> openApiEndpoints = List.of(
 ////            "/user/register",
+   
             "/vehicles/types",
             "/vehicles/brandtypes",
             "/vehicles/fueltypes",
